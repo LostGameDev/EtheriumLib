@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Linq;
+using System.Reflection;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace EtheriumLib.Debug
 {
@@ -55,6 +58,96 @@ namespace EtheriumLib.Debug
             {
                 bool childIsLast = (i == children.Count - 1);
                 PrintHierarchy(children[i], childIndent, childIsLast, false);
+            }
+        }
+
+        public static void PrintComponents(GameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                Plugin.Logger.LogError("GameObject is null");
+                return;
+            }
+
+            Component[] components = gameObject.GetComponents<Component>();
+            if (components.Length == 0)
+            {
+                Plugin.Logger.LogInfo($"{gameObject.name} has no components");
+                return;
+            }
+
+            Plugin.Logger.LogInfo($"Components of {gameObject.name}:");
+            foreach (var comp in components)
+            {
+                Plugin.Logger.LogInfo($"- {comp.GetType().Name}");
+            }
+        }
+
+        public static void PrintComponentInfo(Component component, string indent = "")
+        {
+            if (component == null)
+            {
+                Plugin.Logger.LogInfo(indent + "Component is null");
+                return;
+            }
+
+            Type type = component.GetType();
+            Plugin.Logger.LogInfo(indent + $"Component Info: {type.Name}");
+
+            void PrintValue(string name, object value)
+            {
+                if (value == null) return;
+
+                switch (value)
+                {
+                    case Vector3 v3:
+                        Plugin.Logger.LogInfo($"{indent}  {name}: x={v3.x:F2}, y={v3.y:F2}, z={v3.z:F2}");
+                        break;
+                    case Vector2 v2:
+                        Plugin.Logger.LogInfo($"{indent}  {name}: x={v2.x:F2}, y={v2.y:F2}");
+                        break;
+                    case Quaternion q:
+                        Plugin.Logger.LogInfo($"{indent}  {name}: x={q.x:F2}, y={q.y:F2}, z={q.z:F2}, w={q.w:F2}");
+                        break;
+                    case Color c:
+                        Plugin.Logger.LogInfo($"{indent}  {name}: r={c.r:F2}, g={c.g:F2}, b={c.b:F2}, a={c.a:F2}");
+                        break;
+                    case Matrix4x4 m:
+                        string mat = "";
+                        for (int i = 0; i < 4; i++)
+                            mat += $"{indent}    {m.GetRow(i).x:F5}\t{m.GetRow(i).y:F5}\t{m.GetRow(i).z:F5}\t{m.GetRow(i).w:F5}\n";
+                        Plugin.Logger.LogInfo($"{indent}  {name}:\n{mat.TrimEnd()}");
+                        break;
+                    case GameObject go:
+                        Plugin.Logger.LogInfo($"{indent}  {name}: {go.name}");
+                        break;
+                    default:
+                        if (value is Component) return; // skip redundant Unity references
+                        Plugin.Logger.LogInfo($"{indent}  {name}: {value}");
+                        break;
+                }
+            }
+
+            // Print public properties
+            foreach (var prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                try
+                {
+                    object value = prop.GetValue(component, null);
+                    PrintValue(prop.Name, value);
+                }
+                catch { }
+            }
+
+            // Print public fields
+            foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public))
+            {
+                try
+                {
+                    object value = field.GetValue(component);
+                    PrintValue(field.Name, value);
+                }
+                catch { }
             }
         }
     }
