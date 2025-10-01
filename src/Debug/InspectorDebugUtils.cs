@@ -8,6 +8,12 @@ namespace EtheriumLib.Debug
 {
     public class InspectorDebugUtils
     {
+        /// <summary>
+        /// Prints the object hierarchy of a scene, or the hierarchy of a specific GameObject
+        /// </summary>
+        /// <param name="parent">
+        /// The GameObject to print the hierarchy of, if parent is null, prints the entire scene hierarchy
+        /// </param>
         public static void PrintHierarchy(GameObject parent = null, string indent = "", bool isLast = true, bool isRoot = true)
         {
             if (parent == null)
@@ -61,6 +67,12 @@ namespace EtheriumLib.Debug
             }
         }
 
+        /// <summary>
+        /// Lists all the components of a specific GameObject
+        /// </summary>
+        /// <param name="gameObject">
+        /// The GameObject to list the components of
+        /// </param>
         public static void PrintComponents(GameObject gameObject)
         {
             if (gameObject == null)
@@ -83,16 +95,22 @@ namespace EtheriumLib.Debug
             }
         }
 
-        public static void PrintComponentInfo(Component component, string indent = "")
+        /// <summary>
+        /// Prints all the information about a specific component from a specific GameObject
+        /// </summary>
+        /// <param name="component">
+        /// The component to list the information of
+        /// </param>
+        public static void PrintComponentInfo(Component component, string indent = "-")
         {
             if (component == null)
             {
-                Plugin.Logger.LogInfo(indent + "Component is null");
+                Plugin.Logger.LogInfo("Component is null");
                 return;
             }
 
             Type type = component.GetType();
-            Plugin.Logger.LogInfo(indent + $"Component Info: {type.Name}");
+            Plugin.Logger.LogInfo($"Component Info: {type.Name}");
 
             void PrintValue(string name, object value)
             {

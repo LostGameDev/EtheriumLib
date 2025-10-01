@@ -3,7 +3,6 @@ using EtheriumLib.Debug;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace EtheriumLib.UI
 {
@@ -11,23 +10,42 @@ namespace EtheriumLib.UI
     {
         private static readonly Dictionary<string, string> overrides = new(StringComparer.OrdinalIgnoreCase);
 
-        public static void RegisterOverride(BaseUnityPlugin callerPlugin, string swfName, string assetsPath)
+        /// <summary>
+        /// Registers an SWF file override to replace an SWF file with a custom one
+        /// </summary>
+        /// <param name="swfName">
+        /// The name of the SWF file being replaced
+        /// </param>
+        /// <param name="swfReplacementPath">
+        /// The full path of the custom SWF file
+        /// </param>
+        public static void RegisterOverride(BaseUnityPlugin callerPlugin, string swfName, string swfReplacementPath)
         {
             string modId = CallerUtils.GetPluginGUID(callerPlugin);
 
-            string fullPath = Path.Combine(assetsPath, swfName);
-
-            if (File.Exists(fullPath))
+            if (File.Exists(swfReplacementPath))
             {
-                overrides[swfName] = fullPath;
-                Plugin.Logger.LogInfo($"[ScaleformGFxUtils] Registered override for {modId}: {swfName} -> {fullPath}");
+                overrides[swfName] = swfReplacementPath;
+                Plugin.Logger.LogInfo($"[ScaleformGFxUtils] Registered override for {modId}: {swfName} -> {swfReplacementPath}");
             }
             else
             {
-                Plugin.Logger.LogWarning($"[ScaleformGFxUtils] Tried to register override but file not found: {fullPath}");
+                Plugin.Logger.LogWarning($"[ScaleformGFxUtils] Tried to register override but file not found: {swfReplacementPath}");
             }
         }
 
+        /// <summary>
+        /// Gets the override path of a registered SWF file override
+        /// </summary>
+        /// <param name="swfName">
+        /// The name of the original SWF file being overridden
+        /// </param>
+        /// <param name="overridePath">
+        /// The full path of the custom SWF file
+        /// </param>
+        /// <returns>
+        /// Returns the full path of a registered SWF file override
+        /// </returns>
         public static bool TryGetOverride(string swfName, out string overridePath)
         {
             return overrides.TryGetValue(swfName, out overridePath);
