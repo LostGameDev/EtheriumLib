@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
-    <AssemblyName>EtheriumLib</AssemblyName>
-    <Product>EtheriumLib</Product>
+    <AssemblyName>EtheriumModPreloader</AssemblyName>
+    <Product>EtheriumMod Preloader</Product>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -12,40 +12,35 @@
       https://nuget.bepinex.dev/v3/index.json;
       https://nuget.samboy.dev/v3/index.json
     </RestoreAdditionalProjectSources>
-    <RootNamespace>EtheriumLib</RootNamespace>
+    <RootNamespace>EtheriumModPreloader</RootNamespace>
     <SignAssembly>False</SignAssembly>
+    <BaseOutputPath>..\bin\</BaseOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="EtheriumModPreloader\**" />
-    <EmbeddedResource Remove="EtheriumModPreloader\**" />
-    <None Remove="EtheriumModPreloader\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="SharpZipLib.NET35" Version="1.3.4" />
+    <PackageReference Include="theraot.core" Version="3.2.11" />
     <PackageReference Include="UnityEngine.Modules" Version="4.1.2" IncludeAssets="compile" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
-  </ItemGroup>
-  
+  <!-- Embed NuGet dependency DLLs into final output -->
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>lib\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
+    <EmbeddedResource Include="./lib/ICSharpCode.SharpZipLib.dll" LogicalName="EtheriumModPreloader.Dependencies.ICSharpCode.SharpZipLib.dll" />
+    <EmbeddedResource Include="./lib/Theraot.Core.dll" LogicalName="EtheriumModPreloader.Dependencies.Theraot.Core.dll" />
   </ItemGroup>
-  
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Delete Files="$(TargetDir)Assembly-CSharp.dll" />
     <Delete Files="$(TargetDir)Assembly-CSharp-firstpass.dll" />
     <Delete Files="$(TargetDir)ICSharpCode.SharpZipLib.dll" />
     <Delete Files="$(TargetDir)Theraot.Core.dll" />
   </Target>
+
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+
 </Project>
