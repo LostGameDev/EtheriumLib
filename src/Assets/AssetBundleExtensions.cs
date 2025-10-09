@@ -8,7 +8,7 @@ namespace EtheriumLib.Assets
 		private static readonly Dictionary<AssetBundle, string> _names = new();
 
 		/// <summary>
-		/// Sets the name of the AssetBundle.
+		/// Sets the name of the AssetBundle
 		/// </summary>
 		public static void SetName(this AssetBundle bundle, string name)
 		{
@@ -17,7 +17,7 @@ namespace EtheriumLib.Assets
 		}
 
 		/// <summary>
-		/// Gets the name of the AssetBundle.
+		/// Gets the name of the AssetBundle
 		/// </summary>
 		public static string GetName(this AssetBundle bundle)
 		{

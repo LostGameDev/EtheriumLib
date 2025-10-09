@@ -11,7 +11,7 @@ namespace EtheriumLib.UI
 		private static readonly Dictionary<string, string> overrides = new(StringComparer.OrdinalIgnoreCase);
 
 		/// <summary>
-		/// Registers an SWF file override to replace an SWF file with a custom one
+		/// Registers an SWF file override to replace a vanilla SWF file with a custom one
 		/// </summary>
 		/// <param name="swfName">
 		/// The name of the SWF file being replaced
@@ -41,7 +41,7 @@ namespace EtheriumLib.UI
 		/// Gets the override path of a registered SWF file override
 		/// </summary>
 		/// <param name="swfName">
-		/// The name of the original SWF file being overridden
+		/// The name of the SWF file that is being replaced
 		/// </param>
 		/// <param name="overridePath">
 		/// The full path of the custom SWF file
