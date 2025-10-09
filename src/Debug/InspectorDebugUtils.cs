@@ -109,6 +109,9 @@ namespace EtheriumLib.Debug
 		/// <param name="component">
 		/// The component to list the information of
 		/// </param>
+		/// <param name="indent">
+		/// The string to use for the indent of each value
+		/// </param>
 		public static void PrintComponentInfo(Component component, string indent = "-")
 		{
 			if (component == null)
