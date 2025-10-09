@@ -12,7 +12,7 @@ namespace EtheriumLib.Debug
 		/// Prints the object hierarchy of a scene, or the hierarchy of a specific GameObject
 		/// </summary>
 		/// <param name="parent">
-		/// The GameObject to print the hierarchy of, if parent is null, prints the entire scene hierarchy
+		/// The GameObject to print the hierarchy of, if parent is null the function will instead print the entire scene hierarchy
 		/// </param>
 		public static void PrintHierarchy(GameObject parent = null)
 		{
