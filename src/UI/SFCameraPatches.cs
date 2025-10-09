@@ -13,7 +13,10 @@ namespace EtheriumLib.UI
             if (ScaleformGFxUtils.TryGetOverride(swfName, out var overridePath))
             {
                 __result.MovieName = overridePath;
-                Plugin.Logger.LogInfo($"[SFCamera] Redirected SWF {swfName} -> {overridePath}");
+                if (Plugin.configDebugLogging.Value)
+                {
+                    Plugin.Logger.LogInfo($"[SFCamera] Redirected SWF {swfName} -> {overridePath}");
+                }
             }
         }
 
@@ -24,7 +27,10 @@ namespace EtheriumLib.UI
             if (ScaleformGFxUtils.TryGetOverride(swfName, out var overridePath))
             {
                 __result.MovieName = overridePath;
-                Plugin.Logger.LogInfo($"[SFCamera] Redirected SWF {swfName} -> {overridePath}");
+                if (Plugin.configDebugLogging.Value)
+                {
+                    Plugin.Logger.LogInfo($"[SFCamera] Redirected SWF {swfName} -> {overridePath}");
+                }
             }
         }
     }

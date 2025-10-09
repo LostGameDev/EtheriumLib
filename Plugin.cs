@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using System.IO;
@@ -11,6 +12,9 @@ public class Plugin : BaseUnityPlugin
 {
     internal static new ManualLogSource Logger;
 
+    // Config Values
+    public static ConfigEntry<bool> configDebugLogging;
+
     // Hides a warning about Awake not being used (The IDE is wrong Awake IS used)
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private void Awake()
@@ -18,6 +22,7 @@ public class Plugin : BaseUnityPlugin
         // Plugin startup logic
         Logger = base.Logger;
         Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded! Version: {MyPluginInfo.PLUGIN_VERSION}");
+        CreateConfigs();
 
         // Initialize Harmony
         Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
@@ -45,6 +50,15 @@ public class Plugin : BaseUnityPlugin
             {
                 Logger.LogWarning($"Failed to delete temp mods folder: {ex}");
             }
+        }
+    }
+
+    private void CreateConfigs()
+    {
+        if (!Config.TryGetEntry("Debug", "EnableDebugLogging", out configDebugLogging))
+        {
+            configDebugLogging = Config.Bind("Debug", "EnableDebugLogging", false,
+                                                "Enable Debug Logging for EtheriumLib.");
         }
     }
 }

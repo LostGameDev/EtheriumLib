@@ -24,25 +24,31 @@ namespace EtheriumLib.Assets
             string modId = CallerUtils.GetPluginGUID(callerPlugin);
             string bundlePath = Path.Combine(assetsPath, bundleName);
 
-            Plugin.Logger.LogInfo($"Loading AssetBundle: {bundleName}, for: {modId}");
-
+            if (Plugin.configDebugLogging.Value)
+            {
+                Plugin.Logger.LogInfo($"[AssetBundleUtils] Loading AssetBundle: {bundleName}, for: {modId}");
+            }
+            
             if (!File.Exists(bundlePath))
             {
-                Plugin.Logger.LogError($"Failed to load {bundleName}, for: {modId} at {assetsPath}, {bundlePath} does not exist!");
+                Plugin.Logger.LogError($"[AssetBundleUtils] Failed to load {bundleName}, for: {modId} at {assetsPath}, {bundlePath} does not exist!");
                 return null;
             }
 
             AssetBundle assetBundle = AssetBundle.CreateFromFile(bundlePath);
             if (assetBundle == null)
             {
-                Plugin.Logger.LogError($"Failed to load {bundleName}, for: {modId} at {assetsPath}!");
+                Plugin.Logger.LogError($"[AssetBundleUtils] Failed to load {bundleName}, for: {modId} at {assetsPath}!");
                 return null;
             }
 
             // Set the name via the extension
             assetBundle.SetName(bundleName);
 
-            Plugin.Logger.LogInfo($"Loaded AssetBundle: {bundleName}, for: {modId}");
+            if (Plugin.configDebugLogging.Value)
+            {
+                Plugin.Logger.LogInfo($"[AssetBundleUtils] Loaded AssetBundle: {bundleName}, for: {modId}");
+            }
             return assetBundle;
         }
 
@@ -62,22 +68,28 @@ namespace EtheriumLib.Assets
         {
             string modId = CallerUtils.GetPluginGUID(callerPlugin);
 
-            Plugin.Logger.LogInfo($"Loading Prefab: {prefabName}, for: {modId}, from {assetBundle.GetName()}");
+            if (Plugin.configDebugLogging.Value)
+            {
+                Plugin.Logger.LogInfo($"[AssetBundleUtils] Loading Prefab: {prefabName}, for: {modId}, from {assetBundle.GetName()}");
+            }
 
             if (assetBundle == null)
             {
-                Plugin.Logger.LogError($"Failed to load {prefabName}, for: {modId}, {assetBundle.GetName()} is null!");
+                Plugin.Logger.LogError($"[AssetBundleUtils] Failed to load {prefabName}, for: {modId}, {assetBundle.GetName()} is null!");
                 return null;
             }
 
             GameObject prefab = assetBundle.Load(prefabName) as GameObject;
             if (prefab == null)
             {
-                Plugin.Logger.LogError($"Failed to load {prefabName}, for: {modId} from {assetBundle.GetName()}!");
+                Plugin.Logger.LogError($"[AssetBundleUtils] Failed to load {prefabName}, for: {modId} from {assetBundle.GetName()}!");
                 return null;
             }
 
-            Plugin.Logger.LogInfo($"Loaded AssetBundle: {prefabName}, for: {modId}, from {assetBundle.GetName()}");
+            if (Plugin.configDebugLogging.Value)
+            {
+                Plugin.Logger.LogInfo($"[AssetBundleUtils] Loaded AssetBundle: {prefabName}, for: {modId}, from {assetBundle.GetName()}");
+            }
 
             return prefab;
         }

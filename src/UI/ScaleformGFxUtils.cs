@@ -26,11 +26,14 @@ namespace EtheriumLib.UI
             if (File.Exists(swfReplacementPath))
             {
                 overrides[swfName] = swfReplacementPath;
-                Plugin.Logger.LogInfo($"[ScaleformGFxUtils] Registered override for {modId}: {swfName} -> {swfReplacementPath}");
+                if (Plugin.configDebugLogging.Value)
+                {
+                    Plugin.Logger.LogInfo($"[ScaleformGFxUtils] Registered override for {modId}: {swfName} -> {swfReplacementPath}");
+                }
             }
             else
             {
-                Plugin.Logger.LogWarning($"[ScaleformGFxUtils] Tried to register override but file not found: {swfReplacementPath}");
+                Plugin.Logger.LogError($"[ScaleformGFxUtils] Tried to register override but file not found: {swfReplacementPath}");
             }
         }
 

@@ -77,14 +77,14 @@ namespace EtheriumLib.Debug
         {
             if (gameObject == null)
             {
-                Plugin.Logger.LogError("GameObject is null");
+                Plugin.Logger.LogError("[InspectorDebugUtils] GameObject is null");
                 return;
             }
 
             Component[] components = gameObject.GetComponents<Component>();
             if (components.Length == 0)
             {
-                Plugin.Logger.LogInfo($"{gameObject.name} has no components");
+                Plugin.Logger.LogInfo($"[InspectorDebugUtils] {gameObject.name} has no components");
                 return;
             }
 
@@ -105,12 +105,12 @@ namespace EtheriumLib.Debug
         {
             if (component == null)
             {
-                Plugin.Logger.LogInfo("Component is null");
+                Plugin.Logger.LogError("[InspectorDebugUtils] Component is null");
                 return;
             }
 
             Type type = component.GetType();
-            Plugin.Logger.LogInfo($"Component Info: {type.Name}");
+            Plugin.Logger.LogInfo($"[InspectorDebugUtils] Component Info: {type.Name}");
 
             void PrintValue(string name, object value)
             {
